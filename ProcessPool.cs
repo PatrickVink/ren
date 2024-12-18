@@ -1,48 +1,61 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 
-public class ProcessPool(int poolsize = 5)
+public class ProcessPool
 {
-    List<Process?> _pool = new(poolsize);
-    Process? Spawn(string filename, string arguments, Action? postaction = null)
+    private List<Process?> _pool;
+
+    public ProcessPool(int poolSize)
     {
-        ProcessStartInfo info = new()
-        {
-            CreateNoWindow = true,
-            UseShellExecute = false,
-            RedirectStandardError = true,
-            RedirectStandardOutput = true,
-            FileName = filename,
-            Arguments = arguments
-        };
-
-        Process? process = Process.Start(info);
-        
-        if (process != null)
-        {
-            Console.Error.WriteLine(process.StandardError.ReadToEnd());
-            Console.WriteLine(process.StandardOutput.ReadToEnd());
-        }
-
-        postaction?.Invoke();
-
-        return process;
+        _pool = new List<Process?>(new Process?[poolSize]);
     }
-    public Process? Queue(string filename, string arguments, Action? postaction = null)
+
+    public async Task<Process?> QueueAsync(string filename, string arguments, Action? postaction = null)
     {
-        while (_pool.All(p => p != null && p.HasExited == false))
-            Thread.Sleep(1000);
+        while (_pool.All(p => p != null && !p.HasExited))
+            await Task.Delay(1000);
 
         for (int i = 0; i < _pool.Count; i++)
         {
             Process? slot = _pool[i];
             if (slot == null || slot.HasExited)
             {
-                slot = Spawn(filename, arguments, postaction);
-                _pool[i] = slot;
-                return slot;
+                ProcessStartInfo info = new()
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    FileName = filename,
+                    Arguments = arguments
+                };
+
+                try
+                {
+                    Process? process = Process.Start(info);
+
+                    if (process != null)
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            string output = await process.StandardOutput.ReadToEndAsync();
+                            string error = await process.StandardError.ReadToEndAsync();
+                            Console.WriteLine(output);
+                            Console.Error.WriteLine(error);
+                        });
+
+                        postaction?.Invoke();
+                        _pool[i] = process;
+                        return process;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Failed to start process: {ex.Message}");
+                }
             }
         }
 
-        return default;
+        return null;
     }
 }
