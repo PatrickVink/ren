@@ -1,0 +1,14 @@
+C:\Patrick\source\repos\ren\bin\Debug\net9.0\ren.exe
+C:\Patrick\source\repos\ren\bin\Debug\net9.0\ren.deps.json
+C:\Patrick\source\repos\ren\bin\Debug\net9.0\ren.runtimeconfig.json
+C:\Patrick\source\repos\ren\bin\Debug\net9.0\ren.dll
+C:\Patrick\source\repos\ren\bin\Debug\net9.0\ren.pdb
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ren.GeneratedMSBuildEditorConfig.editorconfig
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ren.AssemblyInfoInputs.cache
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ren.AssemblyInfo.cs
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ren.csproj.CoreCompileInputs.cache
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ren.dll
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\refint\ren.dll
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ren.pdb
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ren.genruntimeconfig.cache
+C:\Patrick\source\repos\ren\obj\Debug\net9.0\ref\ren.dll
