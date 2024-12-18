@@ -7,9 +7,9 @@ const string _codec = "libmp3lame";
 
 DownSample(_music, _pattern, _bitrate, _codec);
 
-void DownSample(string music, string pattern = _pattern, string bitrate = _bitrate, string codec = _codec)
+async void DownSample(string music, string pattern = _pattern, string bitrate = _bitrate, string codec = _codec)
 {
-    ProcessPool pool = new();
+    ProcessPool pool = new(5);
     const string ffmpeg = @"C:\Apps\ffmpeg\bin\ffmpeg.exe";
     foreach (var file in Directory.GetFiles(music, pattern))
     {
@@ -17,7 +17,7 @@ void DownSample(string music, string pattern = _pattern, string bitrate = _bitra
         string output = Path.Combine(path, "..", Path.GetFileName(file));
         string arguments = $"-i \"{file}\" -acodec {codec} -ab {bitrate} \"{output}\"";
 
-        Process? proc = pool.Queue(ffmpeg, arguments, () => 
+        Process? proc = await pool.QueueAsync(ffmpeg, arguments, () => 
         {
             File.SetLastWriteTime(output, File.GetLastWriteTime(file));
         });
