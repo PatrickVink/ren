@@ -11,12 +11,14 @@ internal class Options : RootCommand
         Add(BitrateOption);
         Add(CodecOption);
         Add(PatternOption);
+        Add(RecursiveOption);
         Add(FfmpegOption);
     }
     internal const int DefaultPoolSize = 8;
     internal const string DefaultBitrate = "96k";
     internal const string DefaultCodec = "libmp3lame";
     internal const string DefaultPattern = "*.mp3";
+    internal const bool DefaultRecursive = false;
     internal const string DefaultFfmpeg = "ffmpeg";
 
     internal static readonly Argument<string?> InputArgument = new(
@@ -42,6 +44,10 @@ internal class Options : RootCommand
         ["--pattern", "-f"],
         () => DefaultPattern,
         "The file pattern to search for in the input folder");
+    internal static readonly Option<bool> RecursiveOption = new(
+        ["--recursive", "-r"],
+        () => DefaultRecursive,
+        "Search for media in the input folder and its subfolders");
     internal static readonly Option<string?> FfmpegOption = new(
         ["--ffmpeg", "-e"],
         () => DefaultFfmpeg,
@@ -53,6 +59,7 @@ internal class Options : RootCommand
     public string? Bitrate { get; set; } = DefaultBitrate;
     public string? Codec { get; set; } = DefaultCodec;
     public string? Pattern { get; set; } = DefaultPattern;
+    public bool Recursive { get; set; } = DefaultRecursive;
     public string? Ffmpeg { get; set; } = DefaultFfmpeg;
 }
 internal static class OptionsExtensions

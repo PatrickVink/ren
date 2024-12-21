@@ -22,7 +22,7 @@ class Program
 
     static async Task ProcessFilesAsync(Options options)
     {
-        string[] files = Directory.GetFiles(options.Input!, options.Pattern!, SearchOption.AllDirectories);
+        string[] files = Directory.GetFiles(options.Input!, options.Pattern!, options.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         ConcurrentQueue<Task> tasks = new ConcurrentQueue<Task>();
 
         using SemaphoreSlim semaphore = new SemaphoreSlim(options.PoolSize);
